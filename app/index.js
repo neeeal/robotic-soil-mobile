@@ -437,9 +437,11 @@ const Root = () => {
         >
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-              <TouchableOpacity style={styles.modalClose}  onPress={()=>setModalVisible(!modalVisible)}>
-                <AntDesign name="close" size={24} color="black" />
-              </TouchableOpacity>
+              <View  style={styles.modalClose}>
+                <TouchableOpacity onPress={()=>setModalVisible(!modalVisible)}>
+                  <AntDesign name="close" size={24} color="black" />
+                </TouchableOpacity>
+              </View>
               <Text style={styles.propertyContainer}>
                 {selectedMarker
                   ? `Latitude: ${selectedMarker.latitude}\nLongitude: ${selectedMarker.longitude}`
@@ -543,7 +545,7 @@ const styles = StyleSheet.create({
   },
   map: {
     width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height
+    height: Dimensions.get('window').height,
   },
   modalContainer: {
     flex: 1,
