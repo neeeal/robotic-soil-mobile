@@ -6,14 +6,14 @@ export default function Layout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Drawer>
         <Drawer.Screen
-          name="home/index" // This is the name of the page and must match the url from root
+          name="index" // This is the name of the page and must match the url from root
           options={{
             drawerLabel: 'Map',
             title: 'Location Pins',
           }}
-        />
+        />        
         <Drawer.Screen
-          name="index" // This is the name of the page and must match the url from root
+          name="history/index" // This is the name of the page and must match the url from root
           options={{
             drawerLabel: 'History',
             title: 'History',
