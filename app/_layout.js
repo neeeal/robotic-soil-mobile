@@ -8,15 +8,15 @@ export default function Layout() {
         <Drawer.Screen
           name="home/index" // This is the name of the page and must match the url from root
           options={{
-            drawerLabel: 'Home',
-            title: 'overview',
+            drawerLabel: 'Map',
+            title: 'Location Pins',
           }}
         />
         <Drawer.Screen
           name="index" // This is the name of the page and must match the url from root
           options={{
-            drawerLabel: 'User',
-            title: 'overview',
+            drawerLabel: 'History',
+            title: 'History',
           }}
         />
       </Drawer>

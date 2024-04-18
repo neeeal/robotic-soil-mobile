@@ -3,10 +3,10 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, TextInput, StyleSheet, ScrollView, SafeAreaView, Dimensions, Modal, Pressable } from 'react-native';
 import MapView, { Marker, Callout } from 'react-native-maps';
 import * as Location from 'expo-location';
-
+import { AntDesign } from '@expo/vector-icons';
 // import site_sample from './assets/site_sample.png'; 
-
-const baseUrl = " http://192.168.100.39:5000"
+import { GET_BASE_URL } from '../../helpers/utils'
+const baseUrl = GET_BASE_URL(); 
 
 const Root = () => {
   const [location, setLocation] = useState(null);
@@ -212,7 +212,7 @@ const Root = () => {
   async function getMarkers(userId){
     // Specify the API endpoint for user data
     const apiUrl = baseUrl+'analysis/'+userId;
-    // console.log(apiUrl)
+    console.log(apiUrl)
 
     // Make a GET request using the Fetch API
     const data = await fetch(apiUrl,{
@@ -406,13 +406,6 @@ const Root = () => {
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View style={styles.fixedContentContainer}>
-          {/* <View style={styles.homeRectangleContainer}>
-            <View style={styles.homeRectangle}>
-              <Text style={styles.homeRectangleTitle}>Map</Text>
-            </View>
-          </View> */}
-          {/* <View style={styles.mapContainer}> */}
-          {/* <TouchableOpacity onPress={() => onPress(userId)} ><Text>click me</Text></TouchableOpacity> */}
             <MapView
               showsMyLocationButton={true}
               showsUserLocation={true}
@@ -444,7 +437,10 @@ const Root = () => {
         >
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-              <Text style={styles.modalText}>
+              <TouchableOpacity style={styles.modalClose}  onPress={()=>setModalVisible(!modalVisible)}>
+                <AntDesign name="close" size={24} color="black" />
+              </TouchableOpacity>
+              <Text style={styles.propertyContainer}>
                 {selectedMarker
                   ? `Latitude: ${selectedMarker.latitude}\nLongitude: ${selectedMarker.longitude}`
                   : ''}
@@ -485,7 +481,7 @@ const Root = () => {
                       <>
                         {/* Show edit button */}
                         <Pressable
-                          style={[styles.button, styles.buttonEdit]}
+                          style={[styles.button]}
                           onPress={handleEditPress}
                         >
                           <Text style={styles.textStyle}>Edit</Text>
@@ -523,23 +519,22 @@ const Root = () => {
               </View>
             </Modal>
           </View>
-        {/* </View> */}
       </ScrollView>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  modalClose: {
+    alignItems: 'flex-end'
+  },
   container: {
     flex: 1,
-    backgroundColor: '#AB9790',
   },
   fixedContentContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 20,
-    marginBottom: 20,
   },
   mapContainer: {
     alignItems: 'center',
@@ -548,45 +543,27 @@ const styles = StyleSheet.create({
   },
   map: {
     width: Dimensions.get('window').width,
-    height: 610,
-  },
-  homeRectangleContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 20,
-  },
-  homeRectangle: {
-    backgroundColor: '#795548',
-    padding: 20,
-    borderRadius: 10,
-    width: Dimensions.get('window').width - 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  homeRectangleTitle: {
-    fontSize: 20,
-    color: '#FFFFFF',
-    fontWeight: 'bold',
+    height: Dimensions.get('window').height
   },
   modalContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22,
-    paddingHorizontal: 20,
+    justifyContent: 'flex-end',
+    marginHorizontal: 10,
   },
   modalContent: {
-    backgroundColor: '#D7CCC8', // Adjust the color to match the theme
-    borderRadius: 20,
+    backgroundColor: '#FEFEFEEF', // Adjust the color to match the theme
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
     padding: 35,
-    justifyContent: 'center',
-    alignItems: 'center',
-    elevation: 5,
+    paddingTop:10,
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    // elevation: 5,
   },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
-  },
+  // modalText: {
+  //   marginBottom: 15,
+  //   textAlign: 'center',
+  // },
   button: {
     borderRadius: 20,
     padding: 10,
