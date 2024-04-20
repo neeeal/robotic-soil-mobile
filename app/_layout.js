@@ -8,8 +8,8 @@ export default function Layout() {
         <Drawer.Screen
           name="index" // This is the name of the page and must match the url from root
           options={{
-            drawerLabel: 'Map',
-            title: 'Location Pins',
+            drawerLabel: 'Home',
+            title: 'Home',
           }}
         />        
         <Drawer.Screen

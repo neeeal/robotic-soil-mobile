@@ -29,21 +29,19 @@ const Details = ({ modalVisible, setModalVisible, selectedMarker, handleUpdateMa
       onBackdropPress={() => setModalVisible(false)}
     >
        <TouchableOpacity 
-            // style={styles.container} 
             activeOpacity={1} 
-            style={styles.modalContainer}
+            className="flex-1 justify-end mx-2.5"
             onPressOut={() => {setModalVisible(false)}}
           >
-      <View 
-      >
-              <TouchableWithoutFeedback>
-        <View style={styles.modalContent}>
-          <View style={styles.modalClose}>
+      <View >
+        <TouchableWithoutFeedback>
+        <View className="bg-gray-100 rounded-t-lg p-9 pt-4">
+          <View className="items-end">
             <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
               <AntDesign name="close" size={24} color="black" />
             </TouchableOpacity>
           </View>
-          <Text style={styles.propertyContainer}>
+          <Text className="mb-1 font-bold mr-1">
             {selectedMarker
               ? `Latitude: ${selectedMarker.latitude}\nLongitude: ${selectedMarker.longitude}`
               : ''}
@@ -51,14 +49,14 @@ const Details = ({ modalVisible, setModalVisible, selectedMarker, handleUpdateMa
           {selectedMarker && selectedMarker.soilProperties && (
             <>
               {Object.entries(selectedMarker.soilProperties).map(([key, value]) => (
-                <View key={key} style={styles.propertyContainer}>
+                <View key={key} className="mb-1">
                   {key !== 'image' && (
                     <>
                       {editMode && (
-                        <View style={styles.editedValueContainer}>
-                          <Text style={styles.labelText}>{key}:</Text>
+                        <View className='flex-row items-center bg-gray-50 rounded-lg p-2'>
+                          <Text className='font-bold mr-1'>{key}:</Text>
                           <TextInput
-                            style={styles.inputField}
+                            className=" px-2"
                             placeholder={value.toString()}
                             value={editedValues[key] || value.toString()}
                             onChangeText={(text) => handleInputChange(key, text)}
@@ -142,7 +140,7 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
   },
-  modalContainer: {
+  modalContainer: { // flex flex-end mh-10
     flex: 1,
     justifyContent: 'flex-end',
     marginHorizontal: 10,
