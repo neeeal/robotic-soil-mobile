@@ -4,7 +4,8 @@ import { View, Text, TouchableOpacity, TextInput, StyleSheet, ScrollView, SafeAr
 import MapView, { Marker, Callout } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { AntDesign } from '@expo/vector-icons';
-// import site_sample from './assets/site_sample.png'; 
+// import site_sample from './assets/site_sample.png';
+import Details from '../components/modals/details'; 
 import { GET_BASE_URL } from '../helpers/utils'
 const baseUrl = GET_BASE_URL(); 
 
@@ -426,100 +427,13 @@ const Root = () => {
                 </Marker>
               ))}
             </MapView>
-            
-            <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(!modalVisible);
-          }}
-        >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <View  style={styles.modalClose}>
-                <TouchableOpacity onPress={()=>setModalVisible(!modalVisible)}>
-                  <AntDesign name="close" size={24} color="black" />
-                </TouchableOpacity>
-              </View>
-              <Text style={styles.propertyContainer}>
-                {selectedMarker
-                  ? `Latitude: ${selectedMarker.latitude}\nLongitude: ${selectedMarker.longitude}`
-                  : ''}
-              </Text>
-              {selectedMarker && selectedMarker.soilProperties && (
-                <>
-                  {/* Existing data display */}
-                  {Object.entries(selectedMarker.soilProperties).map(([key, value]) => (
-                    <View key={key} style={styles.propertyContainer}>
-                      {key !== 'image' && (
-                        <>
-                          {editMode && (
-                            <View style={styles.editedValueContainer}>
-                              <Text style={styles.labelText}>{key}:</Text>
-                              <TextInput
-                                style={styles.inputField}
-                                placeholder={value.toString()}
-                                value={value.toString()}
-                                onChangeText={(text) => handleInputChange(key, text)}
-                              />
-                            </View>
-                          )}
-                          {!editMode && (
-                            <View style={styles.displayContainer}>
-                              <Text style={styles.labelText}>{key}:</Text>
-                              <Text style={styles.displayText}>{value.toString()}</Text>
-                            </View>
-                          )}
-                        </>
-                      )}
-                    </View>
-                  ))}
-
-                  {/* Save and Cancel buttons */}
-                  <View style={styles.buttonContainer}>
-                    {/* Conditional rendering based on edit mode */}
-                    {!editMode && (
-                      <>
-                        {/* Show edit button */}
-                        <Pressable
-                          style={[styles.button]}
-                          onPress={handleEditPress}
-                        >
-                          <Text style={styles.textStyle}>Edit</Text>
-                        </Pressable>
-                        <Pressable
-                          style={[styles.button, styles.buttonDelete]}
-                          onPress={handleDeleteMarker}
-                        >
-                          <Text style={styles.textStyle}>Delete Marker</Text>
-                        </Pressable>
-                      </>
-                    )}
-
-                    {/* Show save and cancel buttons in edit mode */}
-                    {editMode && (
-                      <>
-                        <Pressable
-                          style={[styles.button, styles.buttonSave]}
-                          onPress={handleUpdateMarker}
-                        >
-                          <Text style={styles.textStyle}>Save</Text>
-                        </Pressable>
-                        <Pressable
-                          style={[styles.button, styles.buttonCancel]}
-                          onPress={handleCancelEdit}
-                        >
-                          <Text style={styles.textStyle}>Cancel</Text>
-                        </Pressable>
-                        </>
-                      )}
-                    </View>
-                  </>
-                )}
-                </View>
-              </View>
-            </Modal>
+          <Details
+            modalVisible={modalVisible}
+            setModalVisible={setModalVisible}
+            selectedMarker={selectedMarker}
+            handleUpdateMarker={handleUpdateMarker}
+            handleDeleteMarker={handleDeleteMarker}
+          />
           </View>
       </ScrollView>
     </SafeAreaView>
