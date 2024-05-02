@@ -1,68 +1,80 @@
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, Text, TouchableOpacity, SafeAreaView } from 'react-native'; // Import necessary components
 import { Iconify } from 'react-native-iconify';
+import MarkerModal from '../../components/modals/marker.js'
 
 export default function HistoryPage() {
   const [history, setHistory] = useState([]);
-
+  const [selectedMarker, setSelectedMarker] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  
   useEffect(() => {
     setHistory([
       { 
-        id: 1, 
-        location: { longitude: 1.0, latitude: 1.0 }, 
+        mapId: 1, 
+        longitude: 1.0, latitude: 1.0,
         date:"Thu, May 1, 2024 13:39",
-        soil_properties: { nitrogen: 0,phosphorus: 0, potassium: 0, acidity: 0, moisture: 0 }  
+        soilProperties: { nitrogen: 0,phosphorus: 0, potassium: 0, acidity: 0, moisture: 0 }  
       },
       { 
-        id: 2, 
-        location: { longitude: 1.0, latitude: 1.0 }, 
+        mapId: 2, 
+        longitude: 1.0, latitude: 1.0,
         date:"Thu, May 1, 2024 13:39",
-        soil_properties: { nitrogen: 0,phosphorus: 0, potassium: 0, acidity: 0, moisture: 0 }
+        soilProperties: { nitrogen: 0,phosphorus: 0, potassium: 0, acidity: 0, moisture: 0 }
       },
       { 
-        id: 3, 
-        location: { longitude: 1.0, latitude: 1.0 }, 
+        mapId: 3, 
+        longitude: 1.0, latitude: 1.0,
         date:"Thu, May 1, 2024 13:39",
-        soil_properties: { nitrogen: 0,phosphorus: 0, potassium: 0, acidity: 0, moisture: 0 }
+        soilProperties: { nitrogen: 0,phosphorus: 0, potassium: 0, acidity: 0, moisture: 0 }
       },
       { 
-        id: 4, 
-        location: { longitude: 1.0, latitude: 1.0 }, 
+        mapId: 4, 
+        longitude: 1.0, latitude: 1.0,
         date:"Thu, May 1, 2024 13:39",
-        soil_properties: { nitrogen: 0,phosphorus: 0, potassium: 0, acidity: 0, moisture: 0 }
+        soilProperties: { nitrogen: 0,phosphorus: 0, potassium: 0, acidity: 0, moisture: 0 }
       },
       { 
-        id: 5, 
-        location: { longitude: 1.0, latitude: 1.0 }, 
+        mapId: 5, 
+        longitude: 1.0, latitude: 1.0,
         date:"Thu, May 1, 2024 13:39",
-        soil_properties: { nitrogen: 0,phosphorus: 0, potassium: 0, acidity: 0, moisture: 0 }
+        soilProperties: { nitrogen: 0,phosphorus: 0, potassium: 0, acidity: 0, moisture: 0 }
       },
       { 
-        id: 6, 
-        location: { longitude: 1.0, latitude: 1.0 }, 
+        mapId: 6, 
+        longitude: 1.0, latitude: 1.0,
         date:"Thu, May 1, 2024 13:39",
-        soil_properties: { nitrogen: 0,phosphorus: 0, potassium: 0, acidity: 0, moisture: 0 }
+        soilProperties: { nitrogen: 0,phosphorus: 0, potassium: 0, acidity: 0, moisture: 0 }
       },
       { 
-        id: 7, 
-        location: { longitude: 1.0, latitude: 1.0 }, 
+        mapId: 7, 
+        longitude: 1.0, latitude: 1.0,
         date:"Thu, May 1, 2024 13:39",
-        soil_properties: { nitrogen: 0,phosphorus: 0, potassium: 0, acidity: 0, moisture: 0 }
+        soilProperties: { nitrogen: 0,phosphorus: 0, potassium: 0, acidity: 0, moisture: 0 }
       },
       { 
-        id: 8, 
-        location: { longitude: 1.0, latitude: 1.0 }, 
+        mapId: 8, 
+        longitude: 1.0, latitude: 1.0,
         date:"Thu, May 1, 2024 13:39",
-        soil_properties: { nitrogen: 0,phosphorus: 0, potassium: 0, acidity: 0, moisture: 0 }
+        soilProperties: { nitrogen: 0,phosphorus: 0, potassium: 0, acidity: 0, moisture: 0 }
       },
       { 
-        id: 9, 
-        location: { longitude: 1.0, latitude: 1.0 }, 
+        mapId: 9, 
+        longitude: 1.0, latitude: 1.0,
         date:"Thu, May 1, 2024 13:39",
-        soil_properties: { nitrogen: 0,phosphorus: 0, potassium: 0, acidity: 0, moisture: 0 }
+        soilProperties: { nitrogen: 0,phosphorus: 0, potassium: 0, acidity: 0, moisture: 0 }
       },
     ]);
   }, []);
+
+  const handleItemPress = (item) => {
+    setSelectedMarker(item);
+    setModalVisible(true);
+  };
+
+  const handleDeleteMarker = () => {
+    console.log("marker deleted")
+  };  
 
   return (
     <SafeAreaView className="flex flex-1 h-full w-full bg-slate-100 ">
@@ -75,13 +87,13 @@ export default function HistoryPage() {
                   <Iconify icon="mdi:location" size={28} color="#878532" />
                 </View>
                 <View className="flex-2 px-4 ">
-                  <Text className="font-bold text-lg">Sampling Point # {item.id}</Text>
+                  <Text className="font-bold text-lg">Sampling Point # {item.mapId}</Text>
                   <Text className="font-bold">Location: 
-                    <Text className="font-normal"> {item.location.longitude}, {item.location.latitude}</Text>
+                    <Text className="font-normal"> {item.longitude}, {item.latitude}</Text>
                   </Text>
                 </View>
                 <View className="flex-1 items-end">
-                  <TouchableOpacity className="p-1 -mt-1">
+                  <TouchableOpacity onPress={() => handleItemPress(item)} className="p-1 -mt-1">
                     <Iconify icon="material-symbols:chevron-right" size={20} color="black" />
                   </TouchableOpacity>
                 </View>
@@ -91,8 +103,16 @@ export default function HistoryPage() {
               </View>
             </View>
           )}
-          keyExtractor={item => item.id.toString()}
+          keyExtractor={item => item.mapId.toString()}
         />
+    {modalVisible && (
+      <MarkerModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        selectedMarker={selectedMarker}
+        handleDeleteMarker={handleDeleteMarker}
+      />
+    )}
     </SafeAreaView>
   );
 }

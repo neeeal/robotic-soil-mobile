@@ -2,22 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Modal, TouchableOpacity, TouchableWithoutFeedback, TextInput, Pressable, ScrollView, Dimensions, StyleSheet } from 'react-native';
 import { AntDesign } from '@expo/vector-icons'; // Ensure you have @expo/vector-icons installed
 
-const Details = ({ modalVisible, setModalVisible, selectedMarker, handleUpdateMarker, handleDeleteMarker }) => {
-  const [editMode, setEditMode] = useState(false);
-  const [editedValues, setEditedValues] = useState({});
-
-  const handleEditPress = () => {
-    setEditMode(true);
-  };
-
-  const handleCancelEdit = () => {
-    setEditMode(false);
-  };
-
-  const handleInputChange = (key, value) => {
-    setEditedValues(prev => ({ ...prev, [key]: value }));
-  };
-
+const MarkerModal = ({ modalVisible, setModalVisible, selectedMarker, handleDeleteMarker }) => {
   return (
     <Modal
       animationType="slide"
@@ -27,93 +12,67 @@ const Details = ({ modalVisible, setModalVisible, selectedMarker, handleUpdateMa
         setModalVisible(!modalVisible);
       }}
       onBackdropPress={() => setModalVisible(false)}
+      backgroundColor="white"
     >
        <TouchableOpacity 
             activeOpacity={1} 
-            className="flex-1 justify-end mx-2.5"
+            style={{backgroundColor: 'rgba(0, 0, 0, 0.1)'}}
+            className="flex-1 justify-end"
             onPressOut={() => {setModalVisible(false)}}
           >
-      <View >
+    {selectedMarker && selectedMarker.soilProperties && (
+        <>
+      <View>
         <TouchableWithoutFeedback>
-        <View className="bg-gray-100 rounded-t-lg p-9 pt-4">
-          <View className="items-end">
+        <View className="bg-white mx-2 rounded-t-lg p-9 pt-4 flex">
+          <View className="items-end ">
             <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
               <AntDesign name="close" size={24} color="black" />
             </TouchableOpacity>
           </View>
-          <Text className="mb-1 font-bold mr-1">
-            {selectedMarker
-              ? `Latitude: ${selectedMarker.latitude}\nLongitude: ${selectedMarker.longitude}`
-              : ''}
-          </Text>
-          {selectedMarker && selectedMarker.soilProperties && (
-            <>
-              {Object.entries(selectedMarker.soilProperties).map(([key, value]) => (
-                <View key={key} className="mb-1">
-                  {key !== 'image' && (
-                    <>
-                      {editMode && (
-                        <View className='flex-row items-center bg-gray-50 rounded-lg p-2'>
-                          <Text className='font-bold mr-1'>{key}:</Text>
-                          <TextInput
-                            className=" px-2"
-                            placeholder={value.toString()}
-                            value={editedValues[key] || value.toString()}
-                            onChangeText={(text) => handleInputChange(key, text)}
-                          />
-                        </View>
-                      )}
-                      {!editMode && (
-                        <View style={styles.displayContainer}>
-                          <Text style={styles.labelText}>{key}:</Text>
-                          <Text style={styles.displayText}>{value.toString()}</Text>
-                        </View>
-                      )}
-                    </>
-                  )}
-                </View>
-              ))}
+          <View className="mb-6">
+                <Text className="font-bold text-lg">Sample Point #{selectedMarker.mapId} Details</Text>
+                <Text className="text-xs">View Sampling Point details and location</Text>
+          </View>
+
+          <View className="mb-6">
+            <Text className="text-sm leading-6 ">
+                {`Latitude:  ${selectedMarker.latitude}\nLongitude:  ${selectedMarker.longitude}`}
+            </Text>
+          </View>
+
+          <View>
+            <View className="flex-row mb-4">
+                <Text className="font-bold">acidity Level:  </Text>
+                <Text>{selectedMarker.soilProperties.acidity}</Text>
+            </View>
+            
+            <View className="flex-row mb-4">
+                <Text className="font-bold">Moisture Content:  </Text>
+                <Text>{selectedMarker.soilProperties.acidity}</Text>
+            </View>
+
+            <Text className="font-bold mb-2">NPK Values</Text>
+            <View className="pl-4">
+                <Text className="mb-2">Nitrogen:  {selectedMarker.soilProperties.nitrogen}</Text>
+                <Text className="mb-2">Phosphorus:  {selectedMarker.soilProperties.phosphorus}</Text>
+                <Text className="mb-2">Potassium:  {selectedMarker.soilProperties.potassium}</Text>
+            </View>
+          </View>
 
               <View style={styles.buttonContainer}>
-                {!editMode && (
-                  <>
-                    <Pressable
-                      style={[styles.button]}
-                      onPress={handleEditPress}
-                    >
-                      <Text style={styles.textStyle}>Edit</Text>
-                    </Pressable>
                     <Pressable
                       style={[styles.button, styles.buttonDelete]}
                       onPress={handleDeleteMarker}
                     >
                       <Text style={styles.textStyle}>Delete Marker</Text>
                     </Pressable>
-                  </>
-                )}
-
-                {editMode && (
-                  <>
-                    <Pressable
-                      style={[styles.button, styles.buttonSave]}
-                      onPress={() => handleUpdateMarker(editedValues)}
-                    >
-                      <Text style={styles.textStyle}>Save</Text>
-                    </Pressable>
-                    <Pressable
-                      style={[styles.button, styles.buttonCancel]}
-                      onPress={handleCancelEdit}
-                    >
-                      <Text style={styles.textStyle}>Cancel</Text>
-                    </Pressable>
-                  </>
-                )}
               </View>
-            </>
-          )}
         </View>
       </TouchableWithoutFeedback>
       </View>
+      </>
+        )}
       </TouchableOpacity>
     </Modal>
   );
@@ -229,4 +188,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Details;
+export default MarkerModal;

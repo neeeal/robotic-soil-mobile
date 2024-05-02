@@ -6,7 +6,7 @@ import * as Location from 'expo-location';
 // import { AntDesign } from '@expo/vector-icons';
 import { Iconify } from 'react-native-iconify';
 // import site_sample from './assets/site_sample.png';
-import Details from '../../components/modals/details'; 
+import MarkerModal from '../../components/modals/marker'; 
 import { GET_BASE_URL } from '../../helpers/utils'
 const baseUrl = GET_BASE_URL(); 
 
@@ -436,11 +436,10 @@ const MapPage = () => {
                 </Marker>
               ))}
             </MapView>
-          <Details
+          <MarkerModal
             modalVisible={modalVisible}
             setModalVisible={setModalVisible}
             selectedMarker={selectedMarker}
-            handleUpdateMarker={handleUpdateMarker}
             handleDeleteMarker={handleDeleteMarker}
           />
           </View>
