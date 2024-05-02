@@ -60,12 +60,12 @@ const MarkerModal = ({ modalVisible, setModalVisible, selectedMarker, handleDele
             </View>
           </View>
 
-              <View style={styles.buttonContainer}>
+              <View className="items-center pt-8">
                     <Pressable
-                      style={[styles.button, styles.buttonDelete]}
                       onPress={handleDeleteMarker}
+                      className="bg-gray-50 w-full h-10 items-center justify-center rounded-md "
                     >
-                      <Text style={styles.textStyle}>Delete Marker</Text>
+                      <Text className=" text-red-400 ">Remove Sampling Point</Text>
                     </Pressable>
               </View>
         </View>
@@ -77,115 +77,5 @@ const MarkerModal = ({ modalVisible, setModalVisible, selectedMarker, handleDele
     </Modal>
   );
 };
-
-const styles = StyleSheet.create({
-  modalClose: {
-    alignItems: 'flex-end'
-  },
-  container: {
-    flex: 1,
-  },
-  fixedContentContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  mapContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 30,
-  },
-  map: {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
-  },
-  modalContainer: { // flex flex-end mh-10
-    flex: 1,
-    justifyContent: 'flex-end',
-    marginHorizontal: 10,
-  },
-  modalContent: {
-    backgroundColor: '#FEFEFEEF', // Adjust the color to match the theme
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    padding: 35,
-    paddingTop:10,
-    // justifyContent: 'center',
-    // alignItems: 'center',
-    // elevation: 5,
-  },
-  // modalText: {
-  //   marginBottom: 15,
-  //   textAlign: 'center',
-  // },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  buttonClose: {
-    backgroundColor: '#2196F3',
-    marginTop: 20,
-  },
-
-  textStyle: {
-    color: '#FFFFFF',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-
-  modalDetailText: {
-    marginBottom: 10,
-    textAlign: 'center',
-    color: '#000000', // Adjust text color to match the theme
-  },
-
-  buttonDelete: {
-    backgroundColor: '#D32F2F',
-    marginTop: 20,
-  },
-
-  image:{
-    border: 1,
-    width: 100,
-    height: 100
-  },
-
-  inputField:{
-    paddingHorizontal:2
-  },
-
-  buttonContainer:{
-    border:1
-  },
-
-  buttonSave: {
-    border:1
-  },
-
-  buttonCancel:{
-    border:1
-  },
-  propertyContainer: {
-    marginBottom: 10,
-  },
-  editedValueContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#AB9790',
-    borderRadius: 10,
-    padding: 10,
-  },
-
-  displayContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-
-  labelText: {
-    fontWeight: 'bold',
-    marginRight: 5,
-  }
-});
 
 export default MarkerModal;

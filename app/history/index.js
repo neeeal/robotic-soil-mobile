@@ -77,29 +77,29 @@ export default function HistoryPage() {
   };  
 
   return (
-    <SafeAreaView className="flex flex-1 h-full w-full bg-slate-100 ">
+    <SafeAreaView className="flex flex-1 h-full w-full bg-slate-100 pb-4 ">
         <FlatList
           data={history}
           renderItem={({ item }) => (
             <View className="flex p-4 mx-4 mt-4 bg-white rounded-md">
-              <View className="flex-1 flex-row w-full max-h-20">
-                <View className="flex-2">
-                  <Iconify icon="mdi:location" size={28} color="#878532" />
+              <TouchableOpacity onPress={() => handleItemPress(item)}>
+                <View className="flex flex-row w-full max-h-20">
+                  <View className="flex-2">
+                    <Iconify icon="mdi:location" size={28} color="#878532" />
+                  </View>
+                  <View className="flex-2 px-4 ">
+                    <Text className="font-bold text-lg">Sampling Point # {item.mapId}</Text>
+                    <Text className="font-bold">Location: 
+                      <Text className="font-normal"> {item.longitude}, {item.latitude}</Text>
+                    </Text>
+                  </View>
+                  <View className="-mt-1 flex-1 items-end">
+                      <Iconify icon="formkit:right" size={20} color="black" />
+                  </View>
                 </View>
-                <View className="flex-2 px-4 ">
-                  <Text className="font-bold text-lg">Sampling Point # {item.mapId}</Text>
-                  <Text className="font-bold">Location: 
-                    <Text className="font-normal"> {item.longitude}, {item.latitude}</Text>
-                  </Text>
-                </View>
-                <View className="flex-1 items-end">
-                  <TouchableOpacity onPress={() => handleItemPress(item)} className="p-1 -mt-1">
-                    <Iconify icon="material-symbols:chevron-right" size={20} color="black" />
-                  </TouchableOpacity>
-                </View>
-              </View>
-              <View className="flex-1 items-end px-8">
-                <Text>{item.date}</Text>
+              </TouchableOpacity>
+              <View className="flex items-end px-2">
+                <Text className="text-xs text-gray-400">{item.date}</Text>
               </View>
             </View>
           )}
