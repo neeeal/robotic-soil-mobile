@@ -3,69 +3,51 @@ import { View, FlatList, Text, TouchableOpacity, SafeAreaView } from 'react-nati
 import { Iconify } from 'react-native-iconify';
 import HistoryModal from '../../components/modals/history.js'
 import MapView, { Marker } from 'react-native-maps';
+import { GET_MARKER, DELETE_MARKER } from '../../helpers/API'
 
 export default function HistoryPage() {
   const [history, setHistory] = useState([]);
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [userId, setUserId] = useState(-1)
   
   useEffect(() => {
-    setHistory([
-      { 
-        mapId: 1, 
-        longitude: 1.0, latitude: 1.0,
-        date:"Thu, May 1, 2024 13:39",
-        soilProperties: { nitrogen: 0,phosphorus: 0, potassium: 0, acidity: 0, moisture: 0 }  
-      },
-      { 
-        mapId: 2, 
-        longitude: 1.0, latitude: 1.0,
-        date:"Thu, May 1, 2024 13:39",
-        soilProperties: { nitrogen: 0,phosphorus: 0, potassium: 0, acidity: 0, moisture: 0 }
-      },
-      { 
-        mapId: 3, 
-        longitude: 1.0, latitude: 1.0,
-        date:"Thu, May 1, 2024 13:39",
-        soilProperties: { nitrogen: 0,phosphorus: 0, potassium: 0, acidity: 0, moisture: 0 }
-      },
-      { 
-        mapId: 4, 
-        longitude: 1.0, latitude: 1.0,
-        date:"Thu, May 1, 2024 13:39",
-        soilProperties: { nitrogen: 0,phosphorus: 0, potassium: 0, acidity: 0, moisture: 0 }
-      },
-      { 
-        mapId: 5, 
-        longitude: 1.0, latitude: 1.0,
-        date:"Thu, May 1, 2024 13:39",
-        soilProperties: { nitrogen: 0,phosphorus: 0, potassium: 0, acidity: 0, moisture: 0 }
-      },
-      { 
-        mapId: 6, 
-        longitude: 1.0, latitude: 1.0,
-        date:"Thu, May 1, 2024 13:39",
-        soilProperties: { nitrogen: 0,phosphorus: 0, potassium: 0, acidity: 0, moisture: 0 }
-      },
-      { 
-        mapId: 7, 
-        longitude: 1.0, latitude: 1.0,
-        date:"Thu, May 1, 2024 13:39",
-        soilProperties: { nitrogen: 0,phosphorus: 0, potassium: 0, acidity: 0, moisture: 0 }
-      },
-      { 
-        mapId: 8, 
-        longitude: 1.0, latitude: 1.0,
-        date:"Thu, May 1, 2024 13:39",
-        soilProperties: { nitrogen: 0,phosphorus: 0, potassium: 0, acidity: 0, moisture: 0 }
-      },
-      { 
-        mapId: 9, 
-        longitude: 1.0, latitude: 1.0,
-        date:"Thu, May 1, 2024 13:39",
-        soilProperties: { nitrogen: 0,phosphorus: 0, potassium: 0, acidity: 0, moisture: 0 }
-      },
-    ]);
+    const fetchData = async () => {
+      const data = await GET_MARKER(userId); // Await the function call
+  
+      // Check if data is valid before processing it further
+      if (Array.isArray(data)) {
+        const newMarkers = data.filter(markerData => !history.some(marker => marker.mapId === markerData.mapId));
+  
+        if (newMarkers.length > 0) {
+          const newEntries = newMarkers.map(data => ({
+            mapId: data.mapId,
+            latitude: data.latitude,
+            longitude: data.longitude,
+            soilProperties: {
+              moisture: String(data.moisture),
+              acidity: String(data.acidity),
+              nitrogen: String(data.nitrogen),
+              phosphorus: String(data.phosphorus),
+              potassium: String(data.potassium),
+            },
+            date:data.dateAdded
+          }));
+  
+          setHistory(prevMarkers => [...prevMarkers, ...newEntries]);
+        }
+      } else {
+        console.error('Invalid data received:', data);
+      }
+    };
+  
+    // Fetch data initially
+    fetchData();
+  
+    // const intervalId = setInterval(fetchData, 10000);
+  
+    // // Clean up function to clear interval when component unmounts
+    // return () => clearInterval(intervalId);
   }, []);
 
   const handleItemPress = (item) => {
@@ -73,12 +55,25 @@ export default function HistoryPage() {
     setModalVisible(true);
   };
 
-  const handleDeleteMarker = () => {
-    console.log("marker deleted")
-  };  
+  async function handleDeleteMarker () {
+    const updatedMarkers = history.filter((marker) => marker.mapId !== selectedMarker.mapId);
+    result = await DELETE_MARKER(selectedMarker.mapId)
+    setHistory(updatedMarkers);
+    setModalVisible(false);
+  };
 
   return (
     <SafeAreaView className="flex flex-1 h-full w-full bg-slate-100 pb-4 ">
+        <View className="flex-row py-6 px-4 bg-white ">
+          <View className="flex-1 ">
+            <Text className="font-bold text-sm">Tap on previous samples to view details</Text>
+          </View>
+          <View className="flex-2 items-end">
+            <TouchableOpacity>
+                <Iconify icon="mage:filter" size={16} color="white" />
+            </TouchableOpacity>
+          </View>
+        </View>
         <FlatList
           data={history}
           renderItem={({ item }) => (

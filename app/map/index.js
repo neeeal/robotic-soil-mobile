@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, TextInput, StyleSheet, ScrollView, SafeAreaView, Dimensions, Modal, Pressable } from 'react-native';
-import MapView, { Marker, Callout, AnimatedRegion  } from 'react-native-maps';
+import { View, Text, TouchableOpacity, ScrollView, SafeAreaView, Dimensions } from 'react-native';
+import MapView, { Marker, Callout  } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { Iconify } from 'react-native-iconify';
 import MarkerModal from '../../components/modals/marker'; 
-import { GET_MARKER, DELETE_MARKER, GET_BASE_URL } from '../../helpers/API'
+import { GET_MARKER, DELETE_MARKER } from '../../helpers/API'
 import { GET_RANDOM_COLOR } from '../../helpers/utils'
 
 const MapPage = () => {
@@ -64,10 +64,10 @@ const MapPage = () => {
     // Fetch data initially
     fetchData();
   
-    const intervalId = setInterval(fetchData, 10000);
+    // const intervalId = setInterval(fetchData, 10000);
   
-    // Clean up function to clear interval when component unmounts
-    return () => clearInterval(intervalId);
+    // // Clean up function to clear interval when component unmounts
+    // return () => clearInterval(intervalId);
   }, []);
   
 
@@ -151,13 +151,15 @@ const MapPage = () => {
   return (
     <SafeAreaView className="flex flex-1 h-full">
       <ScrollView className="flex flex-1 h-full">
-        <View className="flex-row py-6 px-4 bg-white">
+      <View className="flex-row py-6 px-4 bg-white">
           <View className="flex-1">
             <Text className="font-bold text-sm">Tap on any sampling point from the map above to show details</Text>
-            </View>
+          </View>
           <View className="flex-2 items-end">
-          <Iconify icon="mage:filter" size={16} color="black" />
-            </View>
+            <TouchableOpacity>
+              <Iconify icon="mage:filter" size={16} color="white" />
+            </TouchableOpacity>
+          </View>
         </View>
         <View className="flex flex-1 items-center justify-center">
             <MapView
