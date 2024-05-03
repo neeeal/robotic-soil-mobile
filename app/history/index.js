@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, Text, TouchableOpacity, SafeAreaView } from 'react-native'; // Import necessary components
 import { Iconify } from 'react-native-iconify';
-import MarkerModal from '../../components/modals/marker.js'
+import HistoryModal from '../../components/modals/history.js'
+import MapView, { Marker } from 'react-native-maps';
 
 export default function HistoryPage() {
   const [history, setHistory] = useState([]);
@@ -106,7 +107,7 @@ export default function HistoryPage() {
           keyExtractor={item => item.mapId.toString()}
         />
     {modalVisible && (
-      <MarkerModal
+      <HistoryModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         selectedMarker={selectedMarker}
