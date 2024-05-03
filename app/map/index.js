@@ -24,17 +24,6 @@ const MapPage = () => {
     moisture: 0,
   });
   const [userId, setUserId] = useState(-1)
-  const [editedNitrogen, setEditedNitrogen] = useState('')
-  const [editedPhosphorus, setEditedPhosphorus] = useState('')
-  const [editedPotassium, setEditedPotassium] = useState('')
-  const [editedAcidity, setEditedAcidity] = useState('')
-  const [editedMoisture, setEditedMoisture] = useState('')
-  const [editedType, setEditedType] = useState('')
-  const [editedLatitude, setEditedLatitude] = useState('')
-  const [editedLongitude, setEditedLongitude] = useState('')
-  const [editedImage, setEditedImage] = useState('')
-  const [editMode, setEditMode] = useState(false);
-  
 
   useEffect(() => {
     (async () => {
@@ -47,6 +36,8 @@ const MapPage = () => {
       setLocation(currentLocation);
   
       const data = await getMarkers(userId); // Await the function call
+
+      console.log("data", data)
   
       // Check if data is valid before processing it further
       if (Array.isArray(data)) {
@@ -97,21 +88,6 @@ const MapPage = () => {
     setEditMode(false);
   };
 
-  const handleEditPress = () => {
-    setEditMode(!editMode);
-  };
-
-  const handleInputChange = (key, value) => {
-    // Update the corresponding property in the selectedMarker state
-    setSelectedMarker((prevMarker) => ({
-      ...prevMarker,
-      soilProperties: {
-        ...prevMarker.soilProperties,
-        [key]: value,
-      },
-    }));
-  };
-
   const generateRandomSoilProperties = () => {
     return {
       nitrogen: (Math.random() * 10).toFixed(2),
@@ -124,7 +100,6 @@ const MapPage = () => {
     };
   };
   
-  // TODO: add image to base 64 conversion
 
   async function handleDeleteMarker () {
     const updatedMarkers = markers.filter((marker) => marker.mapId !== selectedMarker.mapId);
@@ -213,7 +188,7 @@ const MapPage = () => {
 
   async function getMarkers(userId){
     // Specify the API endpoint for user data
-    const apiUrl = baseUrl+'analysis/'+userId;
+    const apiUrl = "http://192.168.254.102:5000/api/analysis/-1";
     console.log(apiUrl)
 
     // Make a GET request using the Fetch API
