@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, Modal, TouchableOpacity, TouchableWithoutFeedback, TextInput, Pressable, ScrollView, Dimensions, StyleSheet } from 'react-native';
 import { AntDesign } from '@expo/vector-icons'; // Ensure you have @expo/vector-icons installed
-import MapView, { Marker, Callout  } from 'react-native-maps';
+import MapView, { Marker, Callout, PROVIDER_GOOGLE } from 'react-native-maps';
 import { GET_RANDOM_COLOR } from '../../helpers/utils'
 
 const HistoryModal = ({ modalVisible, setModalVisible, selectedMarker, handleDeleteMarker }) => {
@@ -45,13 +45,15 @@ const HistoryModal = ({ modalVisible, setModalVisible, selectedMarker, handleDel
           <View className="flex items-center justify-center">
             <TouchableWithoutFeedback>
               <MapView
+                provider={PROVIDER_GOOGLE}
                 showsMyLocationButton={false}
                 zoomControlEnabled={false}
                 showsUserLocation={false}
                 scrollEnabled={false}
                 // zoomEnabled={true}
-                minZoomLevel={15}
                 initialRegion={location}
+                minZoomLevel={16}
+                maxZoomLevelZoomLevel={16}
                 mapType='terrain'
                 style={{ 
                   width: Dimensions.get('window').width*.80, 
@@ -62,13 +64,7 @@ const HistoryModal = ({ modalVisible, setModalVisible, selectedMarker, handleDel
                   key={selectedMarker.mapId}
                   pinColor={GET_RANDOM_COLOR(selectedMarker)}
                   coordinate={{latitude: selectedMarker.latitude, longitude: selectedMarker.longitude}}
-                  // onPress={() => handleMarkerPress(selectedMarker)}
                 >
-                  {/* <Callout>
-                    <View>
-                      <Text>Tap here for details</Text>
-                    </View>
-                  </Callout> */}
                 </Marker>
               </MapView>
             </TouchableWithoutFeedback>

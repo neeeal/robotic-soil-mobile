@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, SafeAreaView, Dimensions } from 'react-native';
-import MapView, { Marker, Callout  } from 'react-native-maps';
+import MapView, { Marker, Callout, PROVIDER_GOOGLE } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { Iconify } from 'react-native-iconify';
 import MarkerModal from '../../components/modals/marker'; 
@@ -97,6 +97,7 @@ const MapPage = () => {
         </View>
         <View className="flex flex-1 items-center justify-center">
             <MapView
+              provider={PROVIDER_GOOGLE}
               showsMyLocationButton={true}
               zoomControlEnabled={true}
               showsUserLocation={true}

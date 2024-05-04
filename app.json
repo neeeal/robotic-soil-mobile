@@ -4,14 +4,9 @@
     "slug": "robotic-soil-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/image-modified.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
-    "splash": {
-      "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "assetBundlePatterns": [
       "**/*"
     ],
@@ -20,20 +15,34 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/image-modified.png",
         "backgroundColor": "#ffffff"
+      },
+      "package": "com.neeeal.roboticsoilmobile",
+      "config":{
+        "googleMaps":{
+          "apiKey": "AIzaSyDdTFjPoKas7TZnNwGBKe8s3A9eVGYfIaM"
+        }
       }
     },
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/image-modified.png"
     },
     "plugins": [
       "expo-router"
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "c87c08fc-44c1-448d-95e4-5707734794be"
+      }
     }
   }
 }
