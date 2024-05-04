@@ -69,34 +69,11 @@ const MapPage = () => {
     // // Clean up function to clear interval when component unmounts
     // return () => clearInterval(intervalId);
   }, []);
-  
-
-  // async function handleMapPress (event) {
-  //   const { coordinate } = event.nativeEvent;
-  //   const randomSoilProperties = generateRandomSoilProperties();
-  //   const mapId = String(14.626).replace('.','_').slice(0,)+ '_' + String(14.626)
-  //                     .replace('.','_').slice(0,8) + '_' + Math.floor(Math.random() * 10000)
-                      
-
-  //   const result = await storeMarker(mapId, userId, coordinate, randomSoilProperties);
-  //   setMarkers([...markers, { mapId:mapId, ...coordinate, soilProperties: randomSoilProperties }]);
-  // };
 
   const handleMarkerPress = (marker) => {
     setSelectedMarker(marker);
     setModalVisible(true);
   };
-
-  // const generateRandomSoilProperties = () => {
-  //   return {
-  //     nitrogen: (Math.random() * 10).toFixed(2),
-  //     phosphorus: (Math.random() * 10).toFixed(2),
-  //     potassium: (Math.random() * 10).toFixed(2),
-  //     acidity: (Math.random() * 14).toFixed(2),
-  //     moisture: `${(Math.random() * 100).toFixed(2)}%`,
-  //     image: "none"
-  //   };
-  // };
 
   async function handleDeleteMarker () {
     const updatedMarkers = markers.filter((marker) => marker.mapId !== selectedMarker.mapId);
@@ -104,49 +81,6 @@ const MapPage = () => {
     setMarkers(updatedMarkers);
     setModalVisible(false);
   };
-
-  // async function storeMarker(mapId, userId,coordinates,properties){
-  //   // Specify the API endpoint for user data
-  //   const apiUrl = baseUrl+'analysis/store/'+userId;
-  //   console.log(apiUrl)
-
-  //   const toStore = { mapId:mapId, ...coordinates, ...properties }
-  //   console.log(toStore)
-
-  //   // Make a GET request using the Fetch API
-  //   const data = await fetch(apiUrl,{
-  //     method: 'POST',
-  //     headers: { 
-  //       'Content-type': 'application/json' 
-  //     },
-  //     body: JSON.stringify(toStore)
-  //     })
-  //     .then(response => {
-  //       if (!response.ok) {
-  //         // console.log(response)
-  //         throw new Error('Network response was not ok');
-  //       }
-  //       return response.json();
-  //     })
-  //     .then(response => {
-  //       // Process the retrieved user data
-  //       console.log('msg:', response.msg);
-  //       // console.log("analysis:", response.analysis);
-  //       return {msg: "Store success", data: toStore}
-  //     })
-  //     .catch(error => {
-  //       console.error('Error:', error);
-  //       // Log the response for more information
-  //       console.log('Response:', error);
-  //       // console.log('body:', response);
-  //     });
-
-  //     if(!data){
-  //       return false
-  //     }
-
-  //     return data
-  // }
 
   return (
     <SafeAreaView className="flex flex-1 h-full">
@@ -179,9 +113,7 @@ const MapPage = () => {
                   onPress={() => handleMarkerPress(marker)}
                 >
                   <Callout>
-                    <View>
-                      <Text>Tap here for details</Text>
-                    </View>
+                      <Text className="text-xs">Sample Point #{marker.mapId}</Text>
                   </Callout>
                 </Marker>
               ))}

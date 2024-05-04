@@ -43,7 +43,7 @@ const MarkerModal = ({ modalVisible, setModalVisible, selectedMarker, handleDele
 
           <View>
             <View className="flex-row mb-4">
-                <Text className="font-bold">acidity Level:  </Text>
+                <Text className="font-bold">Acidity Level:  </Text>
                 <Text>{selectedMarker.soilProperties.acidity}</Text>
             </View>
             
