@@ -4,11 +4,9 @@ export function GET_BASE_URL (){
 }
 
 export async function GET_MARKER(userId, page = 1, limit = 10) {
-  // Specify the API endpoint for user data
   const apiUrl = `${GET_BASE_URL()}analysis/${userId}?page=${page}&limit=${limit}`;
 
   try {
-    // Make a GET request using the Fetch API
     const response = await fetch(apiUrl, {
       method: 'GET',
       headers: {
@@ -26,13 +24,10 @@ export async function GET_MARKER(userId, page = 1, limit = 10) {
       throw new Error('Error in response data');
     }
 
-    // Process the retrieved user data
-    console.log('msg:', responseData.msg);
-    console.log('analysis:', responseData.analysis);
     return responseData.analysis;
   } catch (error) {
     console.error('Error:', error.message);
-    return []; // Return an empty array instead of false
+    return false;
   }
 }
 

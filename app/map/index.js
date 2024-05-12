@@ -23,10 +23,10 @@ const MapPage = () => {
         return;
       }
   
-      const longitudeDelta = 1; // Longitude delta for the Philippines
-      const latitudeDelta = 1; // Latitude delta for the Philippines
-      const longitude = 121.062; // Longitude delta for the Philippines
-      const latitude = 14.626; // Latitude delta for the Philippines
+      const longitudeDelta = 1;
+      const latitudeDelta = 1;
+      const longitude = 121.062;
+      const latitude = 14.626;
       setLocation({
         longitudeDelta: longitudeDelta,
         latitudeDelta: latitudeDelta,
@@ -34,42 +34,41 @@ const MapPage = () => {
         latitude: latitude
       });
   
-      const data = await GET_MARKER(userId); // Await the function call
+      let page = 1;
+      let hasMoreData = true;
   
-      // Check if data is valid before processing it further
-      if (Array.isArray(data)) {
-        const newMarkers = data.filter(markerData => !markers.some(marker => marker.mapId === markerData.mapId));
+      while (hasMoreData) {
+        const data = await GET_MARKER(userId, page);
   
-        if (newMarkers.length > 0) {
-          const newEntries = newMarkers.map(data => ({
-            mapId: data.mapId,
-            latitude: data.latitude,
-            longitude: data.longitude,
-            soilProperties: {
-              moisture: String(data.moisture),
-              acidity: String(data.acidity),
-              nitrogen: String(data.nitrogen),
-              phosphorus: String(data.phosphorus),
-              potassium: String(data.potassium)
-            },
-            date: String(data.dateAdded)
-          }));
+        if (Array.isArray(data) && data.length > 0) {
+          const newMarkers = data.filter(markerData => !markers.some(marker => marker.mapId === markerData.mapId));
   
-          setMarkers(prevMarkers => [...prevMarkers, ...newEntries]);
+          if (newMarkers.length > 0) {
+            const newEntries = newMarkers.map(data => ({
+              mapId: data.mapId,
+              latitude: data.latitude,
+              longitude: data.longitude,
+              soilProperties: {
+                moisture: String(data.moisture),
+                acidity: String(data.acidity),
+                nitrogen: String(data.nitrogen),
+                phosphorus: String(data.phosphorus),
+                potassium: String(data.potassium)
+              },
+              date: String(data.dateAdded)
+            }));
+  
+            setMarkers(prevMarkers => [...prevMarkers, ...newEntries]);
+          }
+          page++;
+        } else {
+          hasMoreData = false;
         }
-      } else {
-        console.error('Invalid data received:', data);
       }
     };
   
-    // Fetch data initially
     fetchData();
-  
-    // const intervalId = setInterval(fetchData, 10000);
-  
-    // // Clean up function to clear interval when component unmounts
-    // return () => clearInterval(intervalId);
-  }, []);
+  }, []);  
 
   const handleMarkerPress = (marker) => {
     setSelectedMarker(marker);
