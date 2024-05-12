@@ -1,114 +1,103 @@
 import React, { useState, useEffect } from 'react';
-import { View, FlatList, Text, TouchableOpacity, SafeAreaView } from 'react-native'; // Import necessary components
+import { View, FlatList, Text, TouchableOpacity, SafeAreaView } from 'react-native';
 import { Iconify } from 'react-native-iconify';
-import HistoryModal from '../../components/modals/history.js'
-import MapView, { Marker } from 'react-native-maps';
-import { GET_MARKER, DELETE_MARKER } from '../../helpers/API'
+import HistoryModal from '../../components/modals/history.js';
+import { GET_MARKER, DELETE_MARKER } from '../../helpers/API';
 
 export default function HistoryPage() {
   const [history, setHistory] = useState([]);
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [userId, setUserId] = useState(-1)
-  
+  const [userId, setUserId] = useState(-1);  // Make sure to set this from somewhere, like user session
+  const [page, setPage] = useState(1);
+  const [isFetching, setIsFetching] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await GET_MARKER(userId); // Await the function call
-  
-      // Check if data is valid before processing it further
-      if (Array.isArray(data)) {
-        const newMarkers = data.filter(markerData => !history.some(marker => marker.mapId === markerData.mapId));
-  
-        if (newMarkers.length > 0) {
-          const newEntries = newMarkers.map(data => ({
-            mapId: data.mapId,
-            latitude: data.latitude,
-            longitude: data.longitude,
-            soilProperties: {
-              moisture: String(data.moisture),
-              acidity: String(data.acidity),
-              nitrogen: String(data.nitrogen),
-              phosphorus: String(data.phosphorus),
-              potassium: String(data.potassium),
-            },
-            date:data.dateAdded
-          }));
-  
-          setHistory(prevMarkers => [...prevMarkers, ...newEntries]);
-        }
-      } else {
-        console.error('Invalid data received:', data);
-      }
-    };
-  
-    // Fetch data initially
     fetchData();
-  
-    // const intervalId = setInterval(fetchData, 10000);
-  
-    // // Clean up function to clear interval when component unmounts
-    // return () => clearInterval(intervalId);
   }, []);
+
+  const fetchData = async () => {
+    if (!hasMore || isFetching) return;
+
+    setIsFetching(true);
+    const data = await GET_MARKER(userId, page);
+    setIsFetching(false);
+
+    if (data && data.length > 0) {
+      const newEntries = data.map(markerData => ({
+        mapId: markerData.mapId,
+        latitude: markerData.latitude,
+        longitude: markerData.longitude,
+        soilProperties: {
+          moisture: String(markerData.moisture),
+          acidity: String(markerData.acidity),
+          nitrogen: String(markerData.nitrogen),
+          phosphorus: String(markerData.phosphorus),
+          potassium: String(markerData.potassium),
+        },
+        date: markerData.dateAdded
+      }));
+
+      setHistory(prevHistory => [...prevHistory, ...newEntries]);
+      setPage(prevPage => prevPage + 1);
+    } else {
+      setHasMore(false);
+    }
+  };
 
   const handleItemPress = (item) => {
     setSelectedMarker(item);
     setModalVisible(true);
   };
 
-  async function handleDeleteMarker () {
-    const updatedMarkers = history.filter((marker) => marker.mapId !== selectedMarker.mapId);
-    result = await DELETE_MARKER(selectedMarker.mapId)
-    setHistory(updatedMarkers);
+  async function handleDeleteMarker() {
+    const result = await DELETE_MARKER(selectedMarker.mapId);
+    if (result.ok) {  // Assume DELETE_MARKER returns some status
+      const updatedMarkers = history.filter((marker) => marker.mapId !== selectedMarker.mapId);
+      setHistory(updatedMarkers);
+    }
     setModalVisible(false);
   };
 
   return (
-    <SafeAreaView className="flex flex-1 h-full w-full bg-slate-100 pb-4 ">
-        <View className="flex-row py-6 px-4 bg-white ">
-          <View className="flex-1 ">
-            <Text className="font-bold text-sm">Tap on previous samples to view details</Text>
-          </View>
-          <View className="flex-2 items-end">
-            <TouchableOpacity>
-                <Iconify icon="mage:filter" size={16} color="white" />
-            </TouchableOpacity>
-          </View>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#f9fafb' }}>
+      <View style={{ flexDirection: 'row', padding: 16, backgroundColor: '#fff' }}>
+        <View style={{ flex: 1 }}>
+          <Text style={{ fontWeight: 'bold' }}>Tap on previous samples to view details</Text>
         </View>
-        <FlatList
-          data={history}
-          renderItem={({ item }) => (
-            <View className="flex p-4 mx-4 mt-4 bg-white rounded-md">
-              <TouchableOpacity onPress={() => handleItemPress(item)}>
-                <View className="flex flex-row w-full max-h-20">
-                  <View className="flex-2">
-                    <Iconify icon="mdi:location" size={28} color="#878532" />
-                  </View>
-                  <View className="flex-2 px-4 ">
-                    <Text className="font-bold text-lg">Sampling Point # {item.mapId}</Text>
-                    <Text className="font-bold">Location: 
-                      <Text className="font-normal"> {item.longitude}, {item.latitude}</Text>
-                    </Text>
-                  </View>
-                  <View className="-mt-1 flex-1 items-end">
-                      <Iconify icon="formkit:right" size={20} color="black" />
-                  </View>
-                </View>
-              </TouchableOpacity>
-              <View className="flex items-end px-2">
-                <Text className="text-xs text-gray-400">{item.date}</Text>
+        <TouchableOpacity style={{ justifyContent: 'flex-end' }}>
+          <Iconify icon="mage:filter" size={16} color="black" />
+        </TouchableOpacity>
+      </View>
+      <FlatList
+        data={history}
+        onEndReached={fetchData}
+        onEndReachedThreshold={0.5}
+        renderItem={({ item }) => (
+          <TouchableOpacity onPress={() => handleItemPress(item)} style={{ padding: 16, marginHorizontal: 16, marginTop: 16, backgroundColor: '#fff', borderRadius: 8 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Iconify icon="mdi:location" size={28} color="#878532" />
+              <View style={{ paddingLeft: 16 }}>
+                <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Sampling Point # {item.mapId}</Text>
+                <Text style={{ fontWeight: 'bold' }}>Location: <Text style={{ fontWeight: 'normal' }}>{item.longitude}, {item.latitude}</Text></Text>
               </View>
+              <Iconify icon="formkit:right" size={20} color="black" style={{ marginLeft: 'auto' }} />
             </View>
-          )}
-          keyExtractor={item => item.mapId.toString()}
-        />
-    {modalVisible && (
-      <HistoryModal
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-        selectedMarker={selectedMarker}
-        handleDeleteMarker={handleDeleteMarker}
+            <Text style={{ textAlign: 'right', color: '#aaa', fontSize: 12 }}>{item.date}</Text>
+          </TouchableOpacity>
+        )}
+        keyExtractor={item => item.mapId.toString()}
+        ListFooterComponent={() => (isFetching ? <Text>Loading more...</Text> : null)}
       />
-    )}
+      {modalVisible && (
+        <HistoryModal
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          selectedMarker={selectedMarker}
+          handleDeleteMarker={handleDeleteMarker}
+        />
+      )}
     </SafeAreaView>
   );
 }

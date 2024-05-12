@@ -33,6 +33,7 @@ const MarkerModal = ({ modalVisible, setModalVisible, selectedMarker, handleDele
           <View className="mb-6">
                 <Text className="font-bold text-lg">Sample Point #{selectedMarker.mapId} Details</Text>
                 <Text className="text-xs">View Sampling Point details and location</Text>
+                <Text className="text-xs text-gray-400">{selectedMarker.date}</Text>
           </View>
 
           <View className="mb-6">

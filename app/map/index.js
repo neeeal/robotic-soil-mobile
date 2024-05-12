@@ -51,7 +51,8 @@ const MapPage = () => {
               nitrogen: String(data.nitrogen),
               phosphorus: String(data.phosphorus),
               potassium: String(data.potassium)
-            }
+            },
+            date: String(data.dateAdded)
           }));
   
           setMarkers(prevMarkers => [...prevMarkers, ...newEntries]);

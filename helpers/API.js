@@ -3,44 +3,37 @@ export function GET_BASE_URL (){
   return 'https://grubworm-full-dory.ngrok-free.app/api/'
 }
 
-export async function GET_MARKER(userId){
+export async function GET_MARKER(userId, page = 1, limit = 10) {
   // Specify the API endpoint for user data
-  const apiUrl = GET_BASE_URL()+'analysis/'+userId;
-  console.log(apiUrl)
+  const apiUrl = `${GET_BASE_URL()}analysis/${userId}?page=${page}&limit=${limit}`;
 
-  // Make a GET request using the Fetch API
-  const data = await fetch(apiUrl,{
-    method: 'GET',
-    headers: { 
-      'Content-type': 'application/json' 
-    },
-    // body: JSON.stringify({ "userId": userId })
-    })
-    .then(response => {
-      if (!response.ok) {
-        // console.log(response)
-        throw new Error('Network response was not ok');
+  try {
+    // Make a GET request using the Fetch API
+    const response = await fetch(apiUrl, {
+      method: 'GET',
+      headers: {
+        'Content-type': 'application/json'
       }
-      return response.json();
-    })
-    .then(response => {
-      // Process the retrieved user data
-      console.log('msg:', response.msg);
-      // console.log("analysis:", response.analysis);
-      return response.analysis
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      // Log the response for more information
-      console.log('Response:', error);
-      // console.log('body:', response);
     });
 
-    if(!data){
-      return false
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
     }
 
-    return data
+    const responseData = await response.json();
+
+    if (!responseData.ok) {
+      throw new Error('Error in response data');
+    }
+
+    // Process the retrieved user data
+    console.log('msg:', responseData.msg);
+    console.log('analysis:', responseData.analysis);
+    return responseData.analysis;
+  } catch (error) {
+    console.error('Error:', error.message);
+    return []; // Return an empty array instead of false
+  }
 }
 
 export async function DELETE_MARKER(mapId){
