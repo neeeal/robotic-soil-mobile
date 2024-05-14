@@ -15,7 +15,7 @@ export default function HistoryPage() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [page]);
 
   const fetchData = async () => {
     if (!hasMore || isFetching) return;
@@ -25,7 +25,7 @@ export default function HistoryPage() {
     setIsFetching(false);
 
     if (data && data.length > 0) {
-      const newEntries = data.map(markerData => ({
+      let newEntries = data.map(markerData => ({
         mapId: markerData.mapId,
         latitude: markerData.latitude,
         longitude: markerData.longitude,
@@ -38,6 +38,11 @@ export default function HistoryPage() {
         },
         date: markerData.dateAdded
       }));
+      
+      // console.log("here", history.length, page)
+      if(history.length !== 0){
+        newEntries = newEntries.filter(newEntry => !history.some(entry => entry.mapId === newEntry.mapId));
+      }
 
       setHistory(prevHistory => [...prevHistory, ...newEntries]);
       setPage(prevPage => prevPage + 1);
@@ -60,14 +65,24 @@ export default function HistoryPage() {
     setModalVisible(false);
   };
 
+  const handleRefreshPress = () => {
+    console.log("starting",page,history.length)
+    setHistory([]);
+    setPage(1); 
+    setHasMore(true);
+    // setIsFetching(false);
+    fetchData();
+    console.log("ending",page,history.length)
+  } 
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#f9fafb' }}>
       <View style={{ flexDirection: 'row', padding: 16, backgroundColor: '#fff' }}>
         <View style={{ flex: 1 }}>
           <Text style={{ fontWeight: 'bold' }}>Tap on previous samples to view details</Text>
         </View>
-        <TouchableOpacity style={{ justifyContent: 'flex-end' }}>
-          <Iconify icon="mage:filter" size={16} color="black" />
+        <TouchableOpacity style={{ justifyContent: 'flex-end' }} onPress={() => handleRefreshPress()}>
+          <Iconify icon="mage:reload" size={16} color="black" />
         </TouchableOpacity>
       </View>
       <FlatList
