@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, ScrollView, SafeAreaView, Dimensions } fr
 import MapView, { Marker, Callout, PROVIDER_GOOGLE } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { Iconify } from 'react-native-iconify';
-import MarkerModal from '../../components/modals/marker'; 
+import HistoryModal from '../../components/modals/history.js'; 
 import { GET_MARKER, DELETE_MARKER } from '../../helpers/API'
 import { GET_RANDOM_COLOR } from '../../helpers/utils'
 
@@ -124,12 +124,15 @@ const MapPage = () => {
                 </Marker>
               ))}
             </MapView>
-          <MarkerModal
-            modalVisible={modalVisible}
-            setModalVisible={setModalVisible}
-            selectedMarker={selectedMarker}
-            handleDeleteMarker={handleDeleteMarker}
-          />
+          {selectedMarker && (
+            <HistoryModal
+              modalVisible={modalVisible}
+              setModalVisible={setModalVisible}
+              selectedMarker={selectedMarker}
+              handleDeleteMarker={handleDeleteMarker}
+              showMap={true}
+            />
+          )}
           </View>
       </ScrollView>
     </SafeAreaView>

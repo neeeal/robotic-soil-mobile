@@ -111,6 +111,7 @@ export default function HistoryPage() {
           setModalVisible={setModalVisible}
           selectedMarker={selectedMarker}
           handleDeleteMarker={handleDeleteMarker}
+          showMap={true}
         />
       )}
     </SafeAreaView>
