@@ -36,7 +36,9 @@ export default function HistoryPage() {
           phosphorus: String(markerData.phosphorus),
           potassium: String(markerData.potassium),
         },
-        date: markerData.dateAdded
+        date: markerData.dateAdded,
+        address: markerData.address,
+        image: markerData.image
       }));
       
       // console.log("here", history.length, page)
@@ -111,6 +113,7 @@ export default function HistoryPage() {
           setModalVisible={setModalVisible}
           selectedMarker={selectedMarker}
           handleDeleteMarker={handleDeleteMarker}
+          showMap={true}
         />
       )}
     </SafeAreaView>
