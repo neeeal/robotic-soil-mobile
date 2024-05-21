@@ -97,19 +97,19 @@ const HistoryModal = ({ modalVisible, setModalVisible, selectedMarker, handleDel
                 <View className="flex ">
                   <View className="flex-row mb-4">
                     <Text className="font-bold">Acidity Level:  </Text>
-                    <Text>{selectedMarker.soilProperties.acidity}</Text>
+                    <Text>{selectedMarker.soilProperties.acidity} {selectedMarker.interpretations.acidity}</Text>
                   </View>
                   
                   <View className="flex-row mb-4">
                     <Text className="font-bold">Moisture Content:  </Text>
-                    <Text>{selectedMarker.soilProperties.acidity}</Text>
+                    <Text>{selectedMarker.soilProperties.moisture} {selectedMarker.interpretations.moisture}</Text>
                   </View>
 
                   <Text className="font-bold mb-2">NPK Values</Text>
                   <View className="pl-4">
-                    <Text className="mb-2">Nitrogen:  {selectedMarker.soilProperties.nitrogen}</Text>
-                    <Text className="mb-2">Phosphorus:  {selectedMarker.soilProperties.phosphorus}</Text>
-                    <Text className="mb-2">Potassium:  {selectedMarker.soilProperties.potassium}</Text>
+                    <Text className="mb-2">Nitrogen:  {selectedMarker.soilProperties.nitrogen} {selectedMarker.interpretations.nitrogen}</Text>
+                    <Text className="mb-2">Phosphorus:  {selectedMarker.soilProperties.phosphorus} {selectedMarker.interpretations.phosphorus}</Text>
+                    <Text className="mb-2">Potassium:  {selectedMarker.soilProperties.potassium} {selectedMarker.interpretations.potassium}</Text>
                   </View>
                 </View>
 

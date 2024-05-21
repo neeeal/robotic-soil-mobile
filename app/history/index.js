@@ -38,7 +38,14 @@ export default function HistoryPage() {
         },
         date: markerData.dateAdded,
         address: markerData.address,
-        image: markerData.image
+        image: markerData.image,
+        interpretations: {
+          moisture: String(markerData.interpretations.moisture),
+          acidity: String(markerData.interpretations.acidity),
+          nitrogen: String(markerData.interpretations.nitrogen),
+          phosphorus: String(markerData.interpretations.phosphorus),
+          potassium: String(markerData.interpretations.potassium),
+        }
       }));
       
       // console.log("here", history.length, page)

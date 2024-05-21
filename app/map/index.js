@@ -56,7 +56,14 @@ const MapPage = () => {
             },
             date: String(data.dateAdded),
             address: data.address,
-            image: data.image
+            image: data.image,
+            interpretations: {
+              moisture: String(data.interpretations.moisture),
+              acidity: String(data.interpretations.acidity),
+              nitrogen: String(data.interpretations.nitrogen),
+              phosphorus: String(data.interpretations.phosphorus),
+              potassium: String(data.interpretations.potassium),
+            }
       }));
 
           setMarkers(prevMarkers => [...prevMarkers, ...newEntries]);
