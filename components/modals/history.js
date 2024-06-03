@@ -1,5 +1,5 @@
 // Import Image from react-native
-import { View, Text, Modal, TouchableOpacity, TouchableWithoutFeedback, TextInput, Pressable, ScrollView, Dimensions, StyleSheet, Image } from 'react-native';
+import { View, Text, Modal, TouchableOpacity, KeyboardAvoidingView, TouchableWithoutFeedback, TextInput, Pressable, ScrollView, Dimensions, StyleSheet, Image } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import MapView, { Marker, Callout, PROVIDER_GOOGLE } from 'react-native-maps';
 import { GET_RANDOM_COLOR } from '../../helpers/utils';
@@ -11,6 +11,19 @@ const HistoryModal = ({ modalVisible, setModalVisible, selectedMarker, handleDel
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   };
+
+  const getColor = (interpretation) => {
+    const word = interpretation.toLowerCase();
+    if ( word === 'high' || word === 'alkaline') {
+      return '#ff5252';
+    } else if (word === 'normal' || word === 'neutral') {
+      return '#809c13';
+    } else if (word === 'low' || word === 'acidic') {
+      return '#cca3ff';
+    } else {
+      return 'black';
+    }
+  };
   
   return (
     <Modal
@@ -20,8 +33,6 @@ const HistoryModal = ({ modalVisible, setModalVisible, selectedMarker, handleDel
       onRequestClose={() => {
         setModalVisible(!modalVisible);
       }}
-      onBackdropPress={() => setModalVisible(false)}
-      backgroundColor="white"
     >
       <TouchableOpacity 
         activeOpacity={1} 
@@ -30,98 +41,104 @@ const HistoryModal = ({ modalVisible, setModalVisible, selectedMarker, handleDel
         onPressOut={() => {setModalVisible(false)}}
       >
         {selectedMarker && selectedMarker.soilProperties && (
-          <View>
+          <View style={{ flex: 1 }}>
             <TouchableWithoutFeedback>
-              <View className="bg-white mx-2 rounded-t-lg p-9 pt-4 flex">
-                <View className="items-end ">
-                  <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
-                    <AntDesign name="close" size={24} color="black" />
-                  </TouchableOpacity>
-                </View>
-                <View className="flex mb-6">
-                  <Text className="font-bold text-lg">Sample Point #{selectedMarker.mapId} Details</Text>
-                  <Text className="text-xs">View Sampling Point details and location</Text>
-                  <Text className="text-xs text-gray-400">{selectedMarker.date}</Text>
-                </View>
-                <View className="flex items-center justify-center">
-                  {showMap && (
-                    <TouchableWithoutFeedback>
-                      <MapView
-                        provider={PROVIDER_GOOGLE}
-                        showsMyLocationButton={false}
-                        zoomControlEnabled={false}
-                        showsUserLocation={false}
-                        scrollEnabled={false}
-                        initialRegion={location}
-                        minZoomLevel={16}
-                        maxZoomLevelZoomLevel={16}
-                        mapType='terrain'
-                        style={{ 
-                          width: Dimensions.get('window').width*.80, 
-                          height: Dimensions.get('window').width*.40
-                        }}
-                      >
-                        <Marker
-                          key={selectedMarker.mapId}
-                          pinColor={GET_RANDOM_COLOR(selectedMarker)}
-                          coordinate={{latitude: selectedMarker.latitude, longitude: selectedMarker.longitude}}
+              <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
+                <View style={{ backgroundColor: 'white', margin: 12, borderRadius:10, padding: 9, paddingTop: 4, flex: 1, maxHeight: '96%' }}>
+                  <ScrollView contentContainerStyle={{ paddingBottom: 20 }} className="px-4">
+                    <View style={{ alignItems: 'flex-end' }}>
+                      <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                        <AntDesign name="close" size={24} color="black" />
+                      </TouchableOpacity>
+                    </View>
+                    {showMap && (
+                      <TouchableWithoutFeedback style={{ borderRadius: 10}}>
+                        <MapView
+                          provider={PROVIDER_GOOGLE}
+                          showsMyLocationButton={false}
+                          zoomControlEnabled={false}
+                          showsUserLocation={false}
+                          scrollEnabled={false}
+                          initialRegion={location}
+                          minZoomLevel={16}
+                          maxZoomLevelZoomLevel={16}
+                          mapType='terrain'
+                          style={{ 
+                            width: Dimensions.get('window').width * 0.80, 
+                            height: Dimensions.get('window').width * 0.80,
+                          }}
+                        >
+                          <Marker
+                            key={selectedMarker.mapId}
+                            pinColor={GET_RANDOM_COLOR(selectedMarker)}
+                            coordinate={{latitude: selectedMarker.latitude, longitude: selectedMarker.longitude}}
+                          />
+                        </MapView>
+                      </TouchableWithoutFeedback>
+                    )}
+                    <View className="p-4 my-4  bg-slate-50" style={{ borderRadius: 10}}>
+                      <View className="pb-2 mb-2 border-b-gray-200 border-b-2 ">
+                        <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Sample Point #{selectedMarker.mapId}</Text>
+                        <Text className="text-xs">{selectedMarker.address}</Text>
+                        <Text className="text-xs text-gray-500">{selectedMarker.date}</Text>
+                      </View>
+
+                      <View className="mb-2 flex flex-row">
+                        <Text className="text-sm flex-1">
+                          {`Latitude:  ${selectedMarker.latitude}`}
+                        </Text>
+                        <Text className="text-sm flex-1">
+                          {`Longitude:  ${selectedMarker.longitude}`}
+                        </Text>
+                      </View>
+
+                      <View className="mb-2 flex-row">
+                        <Text className=" font-bold flex-1">Acidity Level:  </Text>
+                        <Text className="flex-1">{selectedMarker.soilProperties.acidity} <Text style={{color: getColor(selectedMarker.interpretations.acidity)}}>({selectedMarker.interpretations.acidity})</Text> </Text>
+                      </View>
+
+                      <View className="mb-2 flex-row">
+                        <Text className="font-bold flex-1">Moisture Content:  </Text>
+                        <Text className="flex-1">{selectedMarker.soilProperties.moisture}  </Text>
+                      </View>
+
+                      <Text className="font-bold">NPK Values</Text>
+                      <View className="pl-6">
+                        <View className="flex-row">
+                          <Text className="flex-1">Nitrogen:</Text>
+                          <Text className="flex-1">{selectedMarker.soilProperties.nitrogen} </Text>
+                        </View>
+
+                        <View className="flex-row">
+                          <Text className="flex-1">Phosphorus:</Text>
+                          <Text className="flex-1">{selectedMarker.soilProperties.phosphorus} </Text>
+                        </View>
+
+                        <View className="flex-row">
+                          <Text className="flex-1">Potassium:</Text>
+                          <Text className="flex-1">{selectedMarker.soilProperties.potassium} </Text>
+                        </View>
+                      </View>
+                    </View>
+                    <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                      <View>
+                        <Image 
+                          source={{ uri: `data:image/png;base64,${selectedMarker.image}` }}
+                          style={{ borderRadius: 10, width: Dimensions.get('window').width * 0.80, height: Dimensions.get('window').width * 0.80 }}
                         />
-                      </MapView>
-                    </TouchableWithoutFeedback>
-                  )}
-                  <View>
-                    {/* Display the image from base64 data */}
-                    <Image 
-                      source={{ uri: `data:image/png;base64,${selectedMarker.image}` }} // Assuming the image is in PNG format, adjust accordingly
-                      style={{ width: 100, height: 100 }} // Adjust dimensions as needed
-                    />
-                  </View>
+                      </View>
+                    </View>
+                    <View style={{ alignItems: 'center', paddingTop: 8 }}>
+                      <Pressable
+                        onPress={handleDeleteMarker}
+                        style={{ backgroundColor: '#f8f8f8', width: '100%', height: 40, alignItems: 'center', justifyContent: 'center', borderRadius: 5 }}
+                      >
+                        <Text style={{ color: 'red' }}>Remove Sampling Point</Text>
+                      </Pressable>
+                    </View>
+                  </ScrollView>
                 </View>
-                <View className="flex">
-                  <View className="flex-row mb-4 ">
-                    <Text className="text-sm leading-6 ">
-                      {`Latitude:  ${selectedMarker.latitude}\nLongitude:  ${selectedMarker.longitude}`}
-                    </Text>
-                  </View>
-                </View>
-                <View className="flex">
-                  <View className="flex-row mb-4 ">
-                    {/* <Text className="text-sm leading-6 ">
-                      {`Latitude:  ${selectedMarker.latitude}\nLongitude:  ${selectedMarker.longitude}`}
-                    </Text> */}
-                    <Text className="font-bold">Address:  </Text>
-                    <Text className="flex-1">{selectedMarker.address}</Text>
-                  </View>
-                </View>
-
-                <View className="flex ">
-                  <View className="flex-row mb-4">
-                    <Text className="font-bold">Acidity Level:  </Text>
-                    <Text>{selectedMarker.soilProperties.acidity} {selectedMarker.interpretations.acidity}</Text>
-                  </View>
-                  
-                  <View className="flex-row mb-4">
-                    <Text className="font-bold">Moisture Content:  </Text>
-                    <Text>{selectedMarker.soilProperties.moisture} {selectedMarker.interpretations.moisture}</Text>
-                  </View>
-
-                  <Text className="font-bold mb-2">NPK Values</Text>
-                  <View className="pl-4">
-                    <Text className="mb-2">Nitrogen:  {selectedMarker.soilProperties.nitrogen} {selectedMarker.interpretations.nitrogen}</Text>
-                    <Text className="mb-2">Phosphorus:  {selectedMarker.soilProperties.phosphorus} {selectedMarker.interpretations.phosphorus}</Text>
-                    <Text className="mb-2">Potassium:  {selectedMarker.soilProperties.potassium} {selectedMarker.interpretations.potassium}</Text>
-                  </View>
-                </View>
-
-                <View className="flex items-center pt-8 ">
-                  <Pressable
-                    onPress={handleDeleteMarker}
-                    className="bg-gray-50 w-full h-10 items-center justify-center rounded-md flex "
-                  >
-                    <Text className=" text-red-400 ">Remove Sampling Point</Text>
-                  </Pressable>
-                </View>
-              </View>
+              </KeyboardAvoidingView>
             </TouchableWithoutFeedback>
           </View>
         )}

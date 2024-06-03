@@ -102,9 +102,9 @@ export default function HistoryPage() {
           <TouchableOpacity onPress={() => handleItemPress(item)} style={{ padding: 16, marginHorizontal: 16, marginTop: 16, backgroundColor: '#fff', borderRadius: 8 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Iconify icon="mdi:location" size={28} color="#878532" />
-              <View style={{ paddingLeft: 16 }}>
+              <View className="pl-4 pr-6 ">
                 <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Sampling Point # {item.mapId}</Text>
-                <Text style={{ fontWeight: 'bold' }}>Location: <Text style={{ fontWeight: 'normal' }}>{item.longitude}, {item.latitude}</Text></Text>
+                <Text style={{ fontWeight: 'bold', fontSize: 12 }}>Location: <Text style={{ fontWeight: 'normal', fontSize: 12 }}>{item.address}</Text></Text>
               </View>
               <Iconify icon="formkit:right" size={20} color="black" style={{ marginLeft: 'auto' }} />
             </View>

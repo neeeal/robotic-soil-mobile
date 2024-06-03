@@ -26,7 +26,7 @@ export default function Root() {
                 </View>
                 <View className="flex justify-center mt-8">
                         <TouchableOpacity onPress={goToMapPage} style={{backgroundColor:"#878532"}} className="w-full py-3 rounded-lg items-center justify-center">
-                            <Text className="text-white">Go to Maps</Text>
+                            <Text className="text-white">Go to Map</Text>
                         </TouchableOpacity>
                 </View>
             </View>
