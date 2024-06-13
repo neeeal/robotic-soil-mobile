@@ -99,25 +99,25 @@ const HistoryModal = ({ modalVisible, setModalVisible, selectedMarker, handleDel
 
                       <View className="mb-2 flex-row">
                         <Text className="font-bold flex-1">Moisture Content:  </Text>
-                        <Text className="flex-1">{selectedMarker.soilProperties.moisture}  </Text>
+                        <Text className="flex-1">{selectedMarker.soilProperties.moisture}%  </Text>
                       </View>
 
                       <Text className="font-bold">NPK Values</Text>
                       <View className="pl-6">
                         <View className="flex-row">
                           <Text className="flex-1">Nitrogen:</Text>
-                          <Text className="flex-1">{selectedMarker.soilProperties.nitrogen} </Text>
+                          <Text className="flex-1">{selectedMarker.soilProperties.nitrogen} <Text className="text-gray-500 ">({selectedMarker.interpretations.nitrogen})</Text></Text>
                         </View>
 
                         <View className="flex-row">
                           <Text className="flex-1">Phosphorus:</Text>
-                          <Text className="flex-1">{selectedMarker.soilProperties.phosphorus} </Text>
+                          <Text className="flex-1">{selectedMarker.soilProperties.phosphorus} <Text className="text-gray-500 ">({selectedMarker.interpretations.phosphorus})</Text></Text>
                         </View>
 
                         <View className="flex-row">
                           <Text className="flex-1">Potassium:</Text>
-                          <Text className="flex-1">{selectedMarker.soilProperties.potassium} </Text>
-                        </View>
+                          <Text className="flex-1">{selectedMarker.soilProperties.potassium} <Text className="text-gray-500 ">({selectedMarker.interpretations.potassium})</Text></Text>
+                          </View>
                       </View>
                     </View>
                     <View style={{ alignItems: 'center', justifyContent: 'center' }}>
