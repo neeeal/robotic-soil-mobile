@@ -7,6 +7,8 @@ import HistoryModal from '../../components/modals/history.js';
 import { GET_MARKER, DELETE_MARKER } from '../../helpers/API'
 import { GET_RANDOM_COLOR } from '../../helpers/utils'
 
+const moment = require('moment');
+
 const MapPage = () => {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
@@ -54,7 +56,7 @@ const MapPage = () => {
               phosphorus: String(data.phosphorus),
               potassium: String(data.potassium)
             },
-            date: String(data.dateAdded),
+            date: moment(data.dateAdded).format('lll'),
             address: data.address,
             image: data.image,
             interpretations: {
@@ -62,6 +64,7 @@ const MapPage = () => {
               acidity: String(data.interpretations.acidity),
               nitrogen: String(data.interpretations.nitrogen),
               phosphorus: String(data.interpretations.phosphorus),
+              texture: String(markerData.texture),
               potassium: String(data.interpretations.potassium),
             }
       }));

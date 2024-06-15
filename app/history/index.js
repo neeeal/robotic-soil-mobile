@@ -4,6 +4,8 @@ import { Iconify } from 'react-native-iconify';
 import HistoryModal from '../../components/modals/history.js';
 import { GET_MARKER, DELETE_MARKER } from '../../helpers/API';
 
+const moment = require('moment');
+
 export default function HistoryPage() {
   const [history, setHistory] = useState([]);
   const [selectedMarker, setSelectedMarker] = useState(null);
@@ -36,7 +38,7 @@ export default function HistoryPage() {
           phosphorus: String(markerData.phosphorus),
           potassium: String(markerData.potassium),
         },
-        date: markerData.dateAdded,
+        date: moment(markerData.dateAdded).format('lll'),
         address: markerData.address,
         image: markerData.image,
         interpretations: {
@@ -44,6 +46,7 @@ export default function HistoryPage() {
           acidity: String(markerData.interpretations.acidity),
           nitrogen: String(markerData.interpretations.nitrogen),
           phosphorus: String(markerData.interpretations.phosphorus),
+          texture: String(markerData.texture),
           potassium: String(markerData.interpretations.potassium),
         }
       }));
