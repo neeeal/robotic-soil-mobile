@@ -47,9 +47,14 @@ export default function Root() {
                         <Text className="flex-1 pl-4 text-xs">Moisture</Text>
                         <Image source={require('../../assets/images/Vector.png')}/>
                     </View>
-                    <View className="pb-4 flex-row justify-between">
+                    <View className="pb-2 flex-row justify-between">
                         <Image source={require('../../assets/images/npk 1.png')}/>
                         <Text className="flex-1 pl-4 text-xs">NPK</Text>
+                        <Image source={require('../../assets/images/Vector.png')}/>
+                    </View>
+                    <View className="pb-4 flex-row justify-between">
+                        <Image className="w-5 h-6" source={require('../../assets/images/texture 2.png')}/>
+                        <Text className="flex-1 pl-4 text-xs">Texture</Text>
                         <Image source={require('../../assets/images/Vector.png')}/>
                     </View>
                 </View>

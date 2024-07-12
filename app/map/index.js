@@ -16,6 +16,7 @@ const MapPage = () => {
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [userId, setUserId] = useState(-1)
+  const [page, setPage] = useState(1);
 
   const fetchData = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
@@ -56,7 +57,9 @@ const MapPage = () => {
               phosphorus: String(data.phosphorus),
               potassium: String(data.potassium)
             },
-            date: moment(data.dateAdded).format('lll'),
+            date: moment(data.dateAdded)
+            .utcOffset(0)  // GMT+8 timezone
+            .format('lll'),
             address: data.address,
             image: data.image,
             interpretations: {
@@ -64,12 +67,13 @@ const MapPage = () => {
               acidity: String(data.interpretations.acidity),
               nitrogen: String(data.interpretations.nitrogen),
               phosphorus: String(data.interpretations.phosphorus),
-              texture: String(markerData.texture),
+              texture: String(data.texture),
               potassium: String(data.interpretations.potassium),
             }
       }));
 
-          setMarkers(prevMarkers => [...prevMarkers, ...newEntries]);
+        setPage(prevPage => prevPage + 1);
+        setMarkers(prevMarkers => [...prevMarkers, ...newEntries]);
         }
         page++;
       } else {
@@ -79,7 +83,7 @@ const MapPage = () => {
   };
 
   useEffect(() => {  
-    fetchData();
+    page;
   }, []);  
 
   const handleMarkerPress = (marker) => {
@@ -96,6 +100,7 @@ const MapPage = () => {
 
   const handleRefreshPress = async () => {
     setMarkers([]);
+    setPage(1);
     await fetchData();
   }
 

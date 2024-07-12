@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, FlatList, Text, TouchableOpacity, SafeAreaView } from 'react-native';
 import { Iconify } from 'react-native-iconify';
 import HistoryModal from '../../components/modals/history.js';
 import { GET_MARKER, DELETE_MARKER } from '../../helpers/API';
-
-const moment = require('moment');
+import moment from 'moment';
 
 export default function HistoryPage() {
   const [history, setHistory] = useState([]);
@@ -15,11 +14,7 @@ export default function HistoryPage() {
   const [isFetching, setIsFetching] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
-  useEffect(() => {
-    fetchData();
-  }, [page]);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     if (!hasMore || isFetching) return;
 
     setIsFetching(true);
@@ -38,7 +33,9 @@ export default function HistoryPage() {
           phosphorus: String(markerData.phosphorus),
           potassium: String(markerData.potassium),
         },
-        date: moment(markerData.dateAdded).format('lll'),
+        date: moment(markerData.dateAdded)
+          .utcOffset(0)  // GMT+8 timezone
+          .format('lll'),
         address: markerData.address,
         image: markerData.image,
         interpretations: {
@@ -50,18 +47,21 @@ export default function HistoryPage() {
           potassium: String(markerData.interpretations.potassium),
         }
       }));
-      
-      // console.log("here", history.length, page)
-      if(history.length !== 0){
-        newEntries = newEntries.filter(newEntry => !history.some(entry => entry.mapId === newEntry.mapId));
-      }
+
+      // Filter out any duplicates
+      console.log(page)
+      newEntries = newEntries.filter(newEntry => !history.some(entry => entry.mapId === newEntry.mapId));
 
       setHistory(prevHistory => [...prevHistory, ...newEntries]);
       setPage(prevPage => prevPage + 1);
     } else {
       setHasMore(false);
     }
-  };
+  }, [userId, page, hasMore, isFetching, history]);
+
+  useEffect(() => {
+    fetchData();
+  }, [page]);
 
   const handleItemPress = (item) => {
     setSelectedMarker(item);
@@ -78,13 +78,10 @@ export default function HistoryPage() {
   };
 
   const handleRefreshPress = () => {
-    console.log("starting",page,history.length)
     setHistory([]);
     setPage(1); 
     setHasMore(true);
-    // setIsFetching(false);
     fetchData();
-    console.log("ending",page,history.length)
   } 
 
   return (
@@ -105,7 +102,7 @@ export default function HistoryPage() {
           <TouchableOpacity onPress={() => handleItemPress(item)} style={{ padding: 16, marginHorizontal: 16, marginTop: 16, backgroundColor: '#fff', borderRadius: 8 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Iconify icon="mdi:location" size={28} color="#878532" />
-              <View className="pl-4 pr-6 ">
+              <View className="pl-4 pr-10 ">
                 <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Sampling Point # {item.mapId}</Text>
                 <Text style={{ fontWeight: 'bold', fontSize: 12 }}>Location: <Text style={{ fontWeight: 'normal', fontSize: 12 }}>{item.address}</Text></Text>
               </View>

@@ -3,7 +3,7 @@ export function GET_BASE_URL (){
   return 'https://grubworm-full-dory.ngrok-free.app/api/'
 }
 
-export async function GET_MARKER(userId, page = 1, limit = 10) {
+export async function GET_MARKER(userId, page = 1, limit = 3) {
   const apiUrl = `${GET_BASE_URL()}analysis/${userId}?page=${page}&limit=${limit}`;
 
   try {
