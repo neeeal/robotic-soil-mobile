@@ -19,8 +19,8 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.neeeal.roboticsoilmobile",
-      "config":{
-        "googleMaps":{
+      "config": {
+        "googleMaps": {
           "apiKey": "AIzaSyDdTFjPoKas7TZnNwGBKe8s3A9eVGYfIaM"
         }
       }
@@ -31,7 +31,8 @@
       "favicon": "./assets/images/logo.jpg"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true
